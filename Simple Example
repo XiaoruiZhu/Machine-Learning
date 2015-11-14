@@ -1,0 +1,23 @@
+## http://www.cnblogs.com/zgw21cn/archive/2009/03/16/1413656.html
+library("kernlab")　#导入包
+data("iris")　#导入数据集iris
+irismodel <- ksvm(Species ~ ., data = iris,
+ type = "C-bsvc", kernel = "rbfdot",
+ kpar = list(sigma = 0.1), C = 10,
+ prob.model = TRUE) #训练
+irismodel
+
+predict(irismodel, iris[c(3, 10, 56, 68, 107, 120), -5], type = "probabilities")
+# Ksvm支持自定义核函数。如
+k <- function(x, y) { (sum(x * y) + 1) * exp(0.001 * sum((x - y)^2)) }
+ class(k) <- "kernel"
+ data("promotergene")
+ gene <- ksvm(Class ~ ., data = promotergene, kernel = k, C = 10, cross = 5)#训练
+ gene
+
+
+## 对于二分类问题，可以对结果用plot()进行可视化。例子如下
+x <- rbind(matrix(rnorm(120), , 2), matrix(rnorm(120, mean = 3), , 2))
+ y <- matrix(c(rep(1, 60), rep(-1, 60)))
+ svp <- ksvm(x, y, type = "C-svc", kernel = "rbfdot", kpar = list(sigma = 2))
+ plot(svp)
