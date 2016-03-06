@@ -62,22 +62,33 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Add one bias variable to the X matrix
+X = [ones(m,1) X];
 
+% recode y
+tem_y = y;
+y = zeros(m, num_labels);
+for i = 1:m
+  y(i, tem_y(i)) = 1;
+end
 
+% Add one bias hidden variable to the Theta1 matrix
 
+a2 = [ones(m,1) sigmoid(X * Theta1')];
 
+a3 = sigmoid(a2 * Theta2');
 
+%m_J = zeros(m, 1);
 
+J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2));
+%+ (lambda/(2*m)) * (Theta1(:,2:end).^2 + Theta2(:,2:end).^2);
+%J = (1/m) * sum(m_J);
 
+%Theta1_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
+%Theta1_grad(2:end) = (1/m) * X(:,2:end)' * (sigmoid(X*theta) - y) + ((lambda/m) * theta(2:end));
 
-
-
-
-
-
-
-
-
+%Theta2_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
+%Theta2_grad(2:end) = (1/m) * X(:,2:end)' * (sigmoid(X*theta) - y) + ((lambda/m) * theta(2:end));
 
 
 % -------------------------------------------------------------
@@ -85,7 +96,7 @@ Theta2_grad = zeros(size(Theta2));
 % =========================================================================
 
 % Unroll gradients
-grad = [Theta1_grad(:) ; Theta2_grad(:)];
+%grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
 end
