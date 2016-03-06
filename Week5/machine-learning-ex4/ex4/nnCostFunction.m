@@ -80,8 +80,7 @@ a3 = sigmoid(a2 * Theta2');
 
 %m_J = zeros(m, 1);
 
-J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2));
-%+ (lambda/(2*m)) * (Theta1(:,2:end).^2 + Theta2(:,2:end).^2);
+J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2)) + (lambda/(2*m)) * (Theta1(:,2:end).^2 + Theta2(:,2:end).^2);
 %J = (1/m) * sum(m_J);
 
 %Theta1_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
