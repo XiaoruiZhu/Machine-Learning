@@ -73,14 +73,46 @@ for i = 1:m
 end
 
 % Add one bias hidden variable to the Theta1 matrix
+z2 = X * Theta1';
+% a2 include the bias unit, dimensions: m * (hidden_layer_size+1)
+a2 = [ones(m,1) sigmoid(z2)];
 
-a2 = [ones(m,1) sigmoid(X * Theta1')];
+% z3 and a3 dimensions: m * num_labels
+z3 = a2 * Theta2';
+a3 = sigmoid(z3);
 
-a3 = sigmoid(a2 * Theta2');
+J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2));
+% + (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
 
-%m_J = zeros(m, 1);
+delta_3 = zeros(m, num_labels);
+delta_2 = zeros(m, hidden_layer_size);
 
-J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2)) + (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
+Delta_2 = zeros(num_labels, (hidden_layer_size+1));
+Delta_1 = zeros(hidden_layer_size, (input_layer_size+1));
+
+for i = 1:m
+  % delta_3 for each sample, the dimensions are 1 * num_labels
+  delta_3(i,:) = a3(i,:) - y(i,:);
+  % delta_2 for each sample, the dimensions are 1 * hidden_layer_size
+  delta_2(i,:) = delta_3(i,:) * Theta2(:, 2:end) .* sigmoidGradient(z2(i,:));
+  
+  % D_2 dimensions: num_labels * (hidden_layer_size+1)
+  Delta_2 = Delta_2 + delta_3(i,:)' * a2(i,:);
+  
+  % D_1 dimensions: hidden_layer_size * (n+1)
+  Delta_1 = Delta_1 + delta_2(i,:)' * X(i, :);
+end
+
+% Unregularized Grad
+
+Theta1_grad = (1/m) * Delta_1;
+% + ((lambda/m) * theta(2:end));
+
+Theta2_grad = (1/m) * Delta_2;
+
+% + ((lambda/m) * theta(2:end));
+
+% !!!!!!!! Regularized Grad !!!!!!!!!!
 
 %Theta1_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
 %Theta1_grad(2:end) = (1/m) * X(:,2:end)' * (sigmoid(X*theta) - y) + ((lambda/m) * theta(2:end));
@@ -94,7 +126,7 @@ J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2)) + (lambda/(2*m))
 % =========================================================================
 
 % Unroll gradients
-%grad = [Theta1_grad(:) ; Theta2_grad(:)];
+grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
 end
