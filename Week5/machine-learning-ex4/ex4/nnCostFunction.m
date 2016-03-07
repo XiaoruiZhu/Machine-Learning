@@ -81,8 +81,12 @@ a2 = [ones(m,1) sigmoid(z2)];
 z3 = a2 * Theta2';
 a3 = sigmoid(z3);
 
-J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2));
-% + (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
+% Unregularized cost function
+% J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2));
+
+% Regularized cost function
+
+J = (1/m)* sum(sum((-1 * y .* log(a3) - (1-y) .* log(1-a3)),2)) + (lambda/(2*m)) * (sum(sum(Theta1(:,2:end).^2)) + sum(sum(Theta2(:,2:end).^2)));
 
 delta_3 = zeros(m, num_labels);
 delta_2 = zeros(m, hidden_layer_size);
@@ -105,20 +109,20 @@ end
 
 % Unregularized Grad
 
-Theta1_grad = (1/m) * Delta_1;
+% Theta1_grad = (1/m) * Delta_1;
 % + ((lambda/m) * theta(2:end));
 
-Theta2_grad = (1/m) * Delta_2;
+% Theta2_grad = (1/m) * Delta_2;
 
 % + ((lambda/m) * theta(2:end));
 
 % !!!!!!!! Regularized Grad !!!!!!!!!!
 
-%Theta1_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
-%Theta1_grad(2:end) = (1/m) * X(:,2:end)' * (sigmoid(X*theta) - y) + ((lambda/m) * theta(2:end));
+Theta1_grad(:,1) = (1/m) * Delta_1(:,1);
+Theta1_grad(:,2:end) = (1/m) * Delta_1(:,2:end) + ((lambda/m) * Theta1(:,2:end));
 
-%Theta2_grad(1) = (1/m) * X(:,1)' * (sigmoid(X*theta) - y);
-%Theta2_grad(2:end) = (1/m) * X(:,2:end)' * (sigmoid(X*theta) - y) + ((lambda/m) * theta(2:end));
+Theta2_grad(:,1) = (1/m) * Delta_2(:,1);
+Theta2_grad(:,2:end) = (1/m) * Delta_2(:,2:end) + ((lambda/m) * Theta2(:,2:end));
 
 
 % -------------------------------------------------------------
