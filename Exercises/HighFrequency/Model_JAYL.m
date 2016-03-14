@@ -1,12 +1,16 @@
 
-%% Machine Learning Online Class - Exercise 3 | Part 1: One-vs-all
+%% Machine Learning Part 1: One-vs-all
 
 %  Instructions
 %  ------------
 % 
-%  This file contains code that helps you get started on the
-%  linear exercise. You will need to complete the following functions 
-%  in this exericse:
+%  This file is used to forecast the overnight return of JAYL
+%  by using the logistic regressio and neural network
+%  An very important part of this function is finishing the learning curve drawing.
+%  And paying attention to how to improve model through curves with repect to number of
+%  training samples and regulazition parameter lambda
+
+%  Supportive functions:
 %
 %     lrCostFunction.m (logistic regression cost function)
 %     oneVsAll.m
