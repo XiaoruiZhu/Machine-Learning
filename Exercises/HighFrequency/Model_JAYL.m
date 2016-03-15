@@ -1,4 +1,3 @@
-
 %% Machine Learning Part 1: One-vs-all
 
 %  Instructions
@@ -32,8 +31,11 @@ clear ; close all; clc
 %% Load Training Data
 fprintf('Loading Data ...\n')
 
-AMZN = csvread('AMZN.csv');
-AMZN = AMZN(2:end,2:end);
+JAYL = csvread('JAYL.csv');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+JAYL = AMZN(2:end,2:end);
 X = AMZN(:, 1:6); y = AMZN(:, 8);
 
 num_labels = 3;
