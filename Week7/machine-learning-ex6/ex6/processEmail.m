@@ -7,7 +7,7 @@ function word_indices = processEmail(email_contents)
 %
 
 % Load Vocabulary
-vocabList = getVocabList(readFile('vocab.txt'));
+vocabList = getVocabList();
 
 % Init return value
 word_indices = [];
