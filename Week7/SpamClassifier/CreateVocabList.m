@@ -1,4 +1,4 @@
-function word_indices = CreateVocabList(email_contents)
+function [unique_words counts]= CreateVocabList(email_contents)
 %PROCESSEMAIL preprocesses a the body of a text file and
 %   returns a list of word_indices 
 %   word_indices = PROCESSEMAIL(email_contents) preprocesses 
@@ -10,7 +10,8 @@ function word_indices = CreateVocabList(email_contents)
 % vocabList = getVocabList();
 
 % Init return value
-word_indices = [];
+word_list = [];
+% word_indices = [];
 
 % ========================== Preprocess Email ===========================
 
@@ -54,6 +55,10 @@ fprintf('\n==== Processed text file ====\n\n');
 % Process file
 l = 0;
 
+% n is number of words in the vocabulary 
+
+
+    
 while ~isempty(email_contents)
 
     % Tokenize and also get rid of any punctuation
@@ -81,8 +86,9 @@ while ~isempty(email_contents)
     
     % =============================================================
     % str_index = find(strcmp(str, vocabList));
-    
-    word_indices = [word_indices ; str];
+
+    word_list = [word_list ; str];
+
 
     % =============================================================
     % Print to screen, ensuring that the output lines are not too long
@@ -90,12 +96,17 @@ while ~isempty(email_contents)
         fprintf('\n');
         l = 0;
     end
-    if l < 100
-      fprintf('%s ', str);    
-    end 
+    fprintf('%s ', str);    
     l = l + length(str) + 1;
 
 end
+
+unique_words = cellstr(unique(word_list, "rows"));
+
+counts = [];
+for i = 1:length(unique_words)
+  counts(i,1) = sum(strcmp(unique_words{i}, cellstr(word_list(:,:))));
+end 
 
 % Print footer
 fprintf('\n\n=========================\n');
