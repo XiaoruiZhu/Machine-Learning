@@ -13,33 +13,26 @@ fprintf('\nPreprocessing one sample file (OneSample.txt)\n');
 
 % Extract Features
 file_contents = readFile('OneSample.txt');
-word_indices  = CreateVocabList(file_contents);
+[unique_words counts] = CreateVocabList(file_contents);
+[newcounts idx] = sort(counts, 'descend');
 
 % Print Stats
-fprintf('Number of all non-zero entries: %d\n', length(word_indices));
+fprintf('Number of all non-zero entries: %d\n', length(unique_words(:,1)));
+
+fprintf('\nTop appeared words: \n');
+for i = 1:15
+    fprintf(' %-10.10s (%d) \n', unique_words(idx(i),:), newcounts(i,:));
+end
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
 
 % count words
-uni_words = unique(word_indices, "rows");
-for i = 1:length(uni_words)
-  counts = sum(strcmp(uni_words(i), word_indices));
-end
 
 fprintf('counts \n');
 fprintf('Program paused. Press enter to continue 33333.\n');
 pause;
 
-[weight, idx] = sort(counts, 'descend');
-
-fprintf('Program paused. Press enter to continue.\n');
-pause;
-
-fprintf('\nTop predictors of spam: \n');
-for i = 1:15
-    fprintf(' %-15s (%f) \n', word_indices{idx(i)}, weight(i));
-end
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
