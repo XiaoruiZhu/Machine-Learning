@@ -22,8 +22,10 @@ idx = zeros(m, 1);
 %
 
 for i = 1:m
-  dist = sum((bsxfun(@minus, centroids, X(i,:))) .^ 2, 2);
-  idx(i) = find(dist == min(dist));
+  dist = sum((centroids - X(ones(size(centroids,1),1)*i,:)) .^ 2, 2);
+  %A - B(ones(size(A,1),1),:);
+  close = find(dist==min(dist));
+  idx(i) = close(1);
 end
 % =============================================================
 
